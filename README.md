@@ -1,0 +1,2 @@
+# kintoneDataReaderforVBA
+サイボウズ・kintoneのデータをREST APIを利用してExcel側から抽出するためのクラスです。
