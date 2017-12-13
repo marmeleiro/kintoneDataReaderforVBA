@@ -13,10 +13,10 @@ JSON形式で取得したデータ処理の面倒な部分を少し扱いやす�
 ### Requirement 
 
 * Dictionary.cls（v1.4.1）
-  * https://github.com/VBA-tools/VBA-Dictionary
+  * https://github.com/VBA-tools/VBA-Dictionary/releases/tag/v1.4.1
 
 * JsonConverter.bas（v2.2.2）
-  * https://github.com/VBA-tools/VBA-JSON
+  * https://github.com/VBA-tools/VBA-JSON/releases/tag/v2.2.2
 
 
 ### Getting started 
