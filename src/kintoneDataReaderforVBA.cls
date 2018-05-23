@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' -----------------------------------------------------------------------
-' kintoneDataReaderforVBA v1.1.0
+' kintoneDataReaderforVBA v1.2.0
 '  -Dictionary.cls と JsonConverter.bas のインポートが必要です。下記から取得してください。
 ' 　  Dictionary.cls：v1.4.1で動作確認
 ' 　    https://github.com/VBA-tools/VBA-Dictionary
@@ -25,8 +25,8 @@ Option Explicit
 'リッチエディタのタグ除去オプション
 Public Enum RemoveTagsEnum
     Original            '取り除かない
-    RemoveAll           '取り除く
-    RemoveChangeNewLine '<br /> と</div>を改行に置き換えて取り除く
+    RemoveAll           '改行も取り除く
+    KeepNewLine         '改行あり
 End Enum
 'エラー定義
 Public Enum KTN_VBA_EXCEPTION
@@ -711,16 +711,19 @@ End Sub
 ''' <param name="typ"></param>
 ''' <returns></returns>
 Public Function RemoveTags(ByVal str As String, ByVal typ As RemoveTagsEnum) As String
-    Dim regEx As Object
-    Set regEx = CreateObject("VBScript.RegExp")
-    Dim targetStr As String: targetStr = str
-    If typ = RemoveTagsEnum.RemoveChangeNewLine Then
-        targetStr = Replace(targetStr, "<br />", "<br />" & vbCrLf, compare:=vbTextCompare)
-        targetStr = Replace(targetStr, "</div>", "</div>" & vbCrLf, compare:=vbTextCompare)
+    If typ = RemoveTagsEnum.Original Then
+        RemoveTags = str
+    Else
+        Dim doc As Object
+        Set doc = CreateObject("htmlfile")
+        Call doc.write(str)
+        Dim retStr As String
+        retStr = doc.FirstChild.innerText
+        If typ = RemoveTagsEnum.RemoveAll Then
+            retStr = Replace(Replace(Replace(retStr, vbCr, ""), vbCrLf, ""), vbLf, "")
+        End If
+        RemoveTags = retStr
     End If
-    regEx.Pattern = "<[^>]*>"
-    regEx.Global = True
-    RemoveTags = regEx.Replace(targetStr, "")
  End Function
  
 ''' <summary>
@@ -1116,3 +1119,5 @@ Private Sub Class_Terminate()
     Set kvu_AppFields = Nothing
     Set kvu_AppSubtableFields = Nothing
 End Sub
+
+
