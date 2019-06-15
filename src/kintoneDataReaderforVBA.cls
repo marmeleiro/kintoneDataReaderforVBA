@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' -----------------------------------------------------------------------
-' kintoneDataReaderforVBA v1.2.0
+' kintoneDataReaderforVBA v1.3.0
 '  -Dictionary.cls と JsonConverter.bas のインポートが必要です。下記から取得してください。
 ' 　  Dictionary.cls：v1.4.1で動作確認
 ' 　    https://github.com/VBA-tools/VBA-Dictionary
@@ -497,11 +497,7 @@ Public Function RecordFields(Optional ByVal existsPropOnly As Boolean = True) As
                 isTarget = True
             End If
             If isTarget Then
-                If Sgn(resultFields) = 0 Then
-                    ReDim resultFields(0)
-                Else
-                    ReDim Preserve resultFields(UBound(resultFields) + 1)
-                End If
+                Call incrimentArray(resultFields)
                 resultFields(UBound(resultFields)) = CStr(f)
             End If
         Next
@@ -603,11 +599,7 @@ Public Function RecordArray(Optional ByVal addFieldLabel As Boolean = True, Opti
         fieldsOrg = Me.RecordFields(existsPropOnly)
         For k = LBound(fieldsOrg) To UBound(fieldsOrg)
             If Me.FieldType(CStr(fieldsOrg(k))) <> "SUBTABLE" Then
-                If Sgn(fields) = 0 Then
-                    ReDim fields(0)
-                Else
-                    ReDim Preserve fields(UBound(fields) + 1)
-                End If
+                Call incrimentArray(fields)
                 fields(UBound(fields)) = fieldsOrg(k)
             End If
         Next
@@ -718,9 +710,12 @@ Public Function RemoveTags(ByVal str As String, ByVal typ As RemoveTagsEnum) As 
         Set doc = CreateObject("htmlfile")
         Call doc.write(str)
         Dim retStr As String
-        retStr = doc.FirstChild.innerText
-        If typ = RemoveTagsEnum.RemoveAll Then
-            retStr = Replace(Replace(Replace(retStr, vbCr, ""), vbCrLf, ""), vbLf, "")
+        If doc.FirstChild Is Nothing Then
+        Else
+            retStr = doc.FirstChild.innerText
+            If typ = RemoveTagsEnum.RemoveAll Then
+                retStr = Replace(Replace(Replace(retStr, vbCr, ""), vbCrLf, ""), vbLf, "")
+            End If
         End If
         RemoveTags = retStr
     End If
@@ -1102,6 +1097,25 @@ Private Function getErrorMessage(ByVal num As KTN_VBA_EXCEPTION) As String
     End Select
     getErrorMessage = result
 End Function
+
+''' <summary>
+''' incrimentArray
+''' </summary>
+''' <param name="rArray"></param>
+Private Sub incrimentArray(ByRef rArray() As String)
+
+On Error GoTo ErrHandler
+    ReDim Preserve rArray(UBound(rArray) + 1)
+    
+    Exit Sub
+    
+ErrHandler:
+    If Err.Number = 9 Then
+        ReDim rArray(0)
+    Else
+        Err.Raise (Err.Number)
+    End If
+End Sub
 Private Sub Class_Initialize()
     Me.Lang = ""
     Me.IsName = True
