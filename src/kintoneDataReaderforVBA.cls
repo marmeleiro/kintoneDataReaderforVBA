@@ -8,11 +8,11 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' -----------------------------------------------------------------------
-' kintoneDataReaderforVBA v1.3.0
+' kintoneDataReaderforVBA v1.3.1
 '  -Dictionary.cls と JsonConverter.bas のインポートが必要です。下記から取得してください。
 ' 　  Dictionary.cls：v1.4.1で動作確認
 ' 　    https://github.com/VBA-tools/VBA-Dictionary
-' 　  JsonConverter.bas：v2.2.2で動作確認
+' 　  JsonConverter.bas：v2.3.1で動作確認
 ' 　    https://github.com/VBA-tools/VBA-JSON
 '  -Windows only
 '
