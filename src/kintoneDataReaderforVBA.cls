@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' -----------------------------------------------------------------------
-' kintoneDataReaderforVBA v1.3.1
+' kintoneDataReaderforVBA v1.3.2
 '  -Dictionary.cls と JsonConverter.bas のインポートが必要です。下記から取得してください。
 ' 　  Dictionary.cls：v1.4.1で動作確認
 ' 　    https://github.com/VBA-tools/VBA-Dictionary
@@ -867,6 +867,7 @@ Private Function kvu_GetFieldValue(ByVal FieldType As String, ByVal rec As Varia
     Select Case FieldType
        
         Case "CREATOR", "MODIFIER"
+            Application.Wait [now()+"00:00:01"] 'Excelが落ちてしまう場合があるので回避策
             If kvu_isName Then
                 kvu_GetFieldValue = rec("name")
             Else
@@ -994,6 +995,7 @@ End Function
 Private Sub kvu_ClearRecordset()
     kvu_RecordCount = 0
     kvu_TotalRecordCount = 0
+    Application.Wait [now()+"00:00:01"] 'Excelが落ちてしまう場合があるので回避策
     Erase kvu_Recordset
 End Sub
  
@@ -1029,7 +1031,7 @@ Private Function knt_EncodeUrl(ByVal sWord As String) As String
     Set d = CreateObject("htmlfile")
     Set elm = d.CreateElement("span")
     elm.setAttribute "id", "result"
-    d.appendChild elm
+    d.body.appendChild elm
     d.parentWindow.execScript "document.getElementById('result').innerText = encodeURIComponent('" & sWord & "');", "JScript"
     knt_EncodeUrl = elm.innerText
 End Function
