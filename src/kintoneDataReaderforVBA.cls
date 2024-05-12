@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' -----------------------------------------------------------------------
-' kintoneDataReaderforVBA v1.3.2
+' kintoneDataReaderforVBA v1.3.3
 '  -Dictionary.cls と JsonConverter.bas のインポートが必要です。下記から取得してください。
 ' 　  Dictionary.cls：v1.4.1で動作確認
 ' 　    https://github.com/VBA-tools/VBA-Dictionary
@@ -996,6 +996,7 @@ Private Sub kvu_ClearRecordset()
     kvu_RecordCount = 0
     kvu_TotalRecordCount = 0
     Application.Wait [now()+"00:00:01"] 'Excelが落ちてしまう場合があるので回避策
+    DoEvents
     Erase kvu_Recordset
 End Sub
  
@@ -1131,9 +1132,6 @@ End Sub
 
 Private Sub Class_Terminate()
     Call kvu_ClearRecordset
-    Set kvu_AppConf = Nothing
-    Set kvu_AppFields = Nothing
-    Set kvu_AppSubtableFields = Nothing
 End Sub
 
 
