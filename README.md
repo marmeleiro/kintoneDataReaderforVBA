@@ -1,3 +1,8 @@
+# Archived
+
+このリポジトリは、今後メンテナンスされません。
+***
+
 # kintoneDataReaderforVBA
 
 サイボウズ・kintoneのデータをExcel側から抽出するためのクラスです。（REST API利用）  
